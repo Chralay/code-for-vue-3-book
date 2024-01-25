@@ -21,17 +21,21 @@ function reactive(obj) {
     // 拦截设置操作
     set(target, key, newVal, receiver) {
       const oldVal = target[key]
+      console.log(target === proto, receiver === parent);
       // 如果属性不存在，则说明是在添加新的属性，否则是设置已存在的属性
       const type = Object.prototype.hasOwnProperty.call(target, key) ? 'SET' : 'ADD'
 
       // 设置属性值
       const res = Reflect.set(target, key, newVal, receiver)
-      console.log(target === receiver.raw)
-      if (target === receiver.raw) {
-        if (oldVal !== newVal && (oldVal === oldVal || newVal === newVal)) {
-          trigger(target, key, type)
-        }
+      if (oldVal !== newVal && (oldVal === oldVal || newVal === newVal)) {
+       trigger(target, key, type)
       }
+      // console.log(target === receiver.raw)
+      // if (target === receiver.raw) {
+      //   if (oldVal !== newVal && (oldVal === oldVal || newVal === newVal)) {
+      //     trigger(target, key, type)
+      //   }
+      // }
 
       return res
     },
@@ -143,19 +147,20 @@ function cleanup(effectFn) {
 
 // =================================================================
 const obj = { foo: 1 }
+const proto = { bar: 2 }
 const child = reactive(obj)
-const parent = reactive({ bar: 2 })
+const parent = reactive(proto)
 
-Object.setPrototypeOf(child, parent)
+Object.setPrototypeOf(child, parent) // 会触发
 
-console.log('asdfasf', Object.getPrototypeOf(obj) === parent)
+// console.log('asdfasf', Object.getPrototypeOf(obj) === parent)
 
 effect(() => {
   console.log(child.bar)
 })
 
 child.bar = 3
-obj.bar = 3
+// obj.bar = 3
 
 
 

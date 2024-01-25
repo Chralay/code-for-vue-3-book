@@ -116,9 +116,8 @@ const renderer = createRenderer({
       if (nextValue) {
         if (!invoker) {
           invoker = el._vei[key] = (e) => {
-            console.log(e.timeStamp)
-            console.log(invoker.attached)
-            if (e.timeStamp < invoker.attached) return
+            console.log(el.tagName, '事件发生时间：', e.timeStamp)
+            // if (e.timeStamp < invoker.attached) return
             if (Array.isArray(invoker.value)) {
               invoker.value.forEach(fn => fn(e))
             } else {
@@ -127,6 +126,7 @@ const renderer = createRenderer({
           }
           invoker.value = nextValue
           invoker.attached = performance.now()
+          console.log(el.tagName, '事件绑定时间', invoker.attached)
           el.addEventListener(name, invoker)
         } else {
           invoker.value = nextValue

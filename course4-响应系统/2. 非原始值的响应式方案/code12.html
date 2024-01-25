@@ -75,7 +75,8 @@ function createReactive(obj, isShallow = false, isReadonly = false) {
       return Reflect.has(target, key)
     },
     ownKeys(target) {
-      track(target, ITERATE_KEY)
+      console.log('ownkeys: ')
+      track(target, Array.isArray(target) ? 'length' : ITERATE_KEY)
       return Reflect.ownKeys(target)
     },
     deleteProperty(target, key) {
@@ -202,13 +203,27 @@ function cleanup(effectFn) {
 // =================================================================
 
 
-const arr = reactive(['foo'])
+// const arr = reactive(['foo'])
+
+// effect(() => {
+//   console.log(arr[0]) // foo
+// })
+
+// arr.length = 0
+
+
+// =================================================================
+// 书上说，for...of迭代数组不像for...in需要使用ownKeys拦截~我试试
+
+const arr = reactive([1])
 
 effect(() => {
-  console.log(arr[0]) // foo
+  console.log('effect');
+  for (const val of arr) {
+    console.log('val:', val)
+  }
 })
 
-arr.length = 0
-
-
+// arr[1] = 'bar'  // 能够触发响应
+arr.length = 0  // 能够触发响应
 </script>

@@ -321,6 +321,8 @@ function createRenderer(options) {
         patch,
         patchChildren,
         move(vnode, container, anchor) {
+          // vnode的component属性不是一定会有的吗？
+          // 答：不是哦，只有vnode.type是对象or函数才会进入mountComponent
           insert(vnode.component ? vnode.component.subTree.el : vnode.el, container, anchor)
         }
       })
@@ -676,6 +678,8 @@ const KeepAlive = {
   }
 }
 
+// 可以发现，Teleport的实现方式不同于KeepAlive、Transition。
+// 后者是走组件的渲染方式，有setup、slots。但Teleport通过n2.children就可以获取子节点了
 const Teleport = {
   __isTeleport: true,
   process(n1, n2, container, anchor, internals) {

@@ -266,12 +266,16 @@ function createRenderer(options) {
   }
 
   function unmount(vnode) {
+    // vnode是谁？unmount会进入两次，第一次是CompVNode，第二次是CompVNode.component.subTree，即 MyComponent组件
     if (vnode.type === Fragment) {
       vnode.children.forEach(c => unmount(c))
       return
     } else if (typeof vnode.type === 'object') {
       if (vnode.shouldKeepAlive) {
         vnode.keepAliveInstance._deActivate(vnode)
+        console.log(vnode.keepAliveInstance._deActivate === vnode.component._deActivate); // false
+        // 因为 vnode 是 MyComponent（它是CompVNode的子节点）。vnode.keepAliveInstance === CompVNode.component
+        // 而 vnode.component 是MyComponent再里面一层，是个按钮。
       } else {
         unmount(vnode.component.subTree)
       }
@@ -448,7 +452,8 @@ function createRenderer(options) {
     let setupState = null
     if (setup) {
       const setupContext = { attrs, emit, slots }
-      const prevInstance = setCurrentInstance(instance)
+      const prevInstance = setCurrentInstance(instance) // 我无法理解这行跟setCurrentInstance(prevInstance)的作用
+      // 答：用来确保setup上下文一致。在调setup之前设置新的上下文，调完setup后，将上下文改回来。
       const setupResult = setup(shallowReadonly(instance.props), setupContext)
       setCurrentInstance(prevInstance)
       if (typeof setupResult === 'function') {
@@ -619,12 +624,14 @@ const KeepAlive = {
   },
   setup(props, { slots }) {
     
-    const instance = currentInstance
+    const instance = currentInstance // 在setup()之前设置了新的实例：vnode.component = instance。此时的vnode是CompVNode。 即 CompVNode.component === currentInstance
+    // instance代表的是使用KeepAlive组件的VNode
     const { move, createElement } = instance.keepAliveCtx
 
     const storageContainer = createElement('div')
 
     instance._deActivate = (vnode) => {
+      // 可以去调用方看看vnode是谁。其实是rawVNode，是CompVNode的子组件
       move(vnode, storageContainer)
     }
 
@@ -658,7 +665,7 @@ const KeepAlive = {
       }
 
       rawVNode.shouldKeepAlive = true
-      rawVNode.keepAliveInstance = instance
+      rawVNode.keepAliveInstance = instance // 不会无缘无故赋值instance。目的是保存父组件的instance，父组件是KeepAlive，所以从名字能体现出来。
 
       return rawVNode
     }
@@ -668,7 +675,8 @@ const KeepAlive = {
 const CompVNode = {
   type: KeepAlive,
   props: {
-    exclude: /^My/
+    // exclude: /^My/
+    include: /^My/
   },
   children: {
     default() {

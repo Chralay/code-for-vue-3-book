@@ -97,7 +97,8 @@ const p = new Proxy(obj, {
     // 将副作用函数 activeEffect 添加到存储副作用函数的桶中
     track(target, key)
     // 返回属性值
-    return Reflect.get(target, key, receiver)
+    return target[key]
+    // return Reflect.get(target, key, receiver)
   },
   // 拦截设置操作
   set(target, key, newVal) {
@@ -110,7 +111,11 @@ const p = new Proxy(obj, {
 
 
 effect(() => {
-  console.log(p.bar)
+  console.log('bar:',p.bar)
+})
+
+effect(() => {
+  console.log('foo:',p.foo)
 })
 
 p.foo++

@@ -162,7 +162,7 @@
     const children = currentNode.children
     if (children) {
       for (let i = 0; i < children.length; i++) {
-        traverseNode(children[i])
+        traverseNode(children[i], context) // 递归的时候要将context传下去，不然context是undefined
       }
     }
   }
