@@ -268,7 +268,7 @@ function decodeHtml(rawText, asAttr = false) {
           if (
             asAttr &&
             !semi &&
-            /[=a-z0-9]/i.test(rawText[name.length + 1] || '')
+            /[=a-z0-9]/i.test(rawText[name.length + 1] || '') // 加1是因为要算上第一个&字符，如&abcp，name是abc，长度3，访问p是索引4
           ) {
             decodedText += '&' + name
             advance(1 + name.length)
@@ -277,7 +277,7 @@ function decodeHtml(rawText, asAttr = false) {
             advance(1 + name.length)
           }
         } else {
-          decodedText += '&' + name
+          decodedText += '&' + name // 退出for循环的条件是value有值或者length是0。length为0的上一次循环是length===1，name是 &字符后的下1个字符
           advance(1 + name.length)
         }
       } else {
@@ -365,7 +365,8 @@ function parseComment(context) {
 }
 
 
-const s = `<div><!-- comments --></div>`
+// const s = `<div><!-- comments --></div>`
+const s = `<div><p>Vue&#xfffd;</p><p>Template</p></div>`
 const ast = parse(s)
 console.log(ast)
 

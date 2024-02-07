@@ -190,13 +190,22 @@ function cleanup(effectFn) {
 // =================================================================
 
 
+// const arr = reactive(['foo'])
+
+// effect(() => {
+//   console.log(arr.length)
+// })
+
+// arr[1] = 'bar'
+
+
 const arr = reactive(['foo'])
 
 effect(() => {
-  console.log(arr.length)
+  for(i of arr) {
+    console.log(i);
+  }
+  // console.log(arr[0]) // foo
 })
-
-arr[1] = 'bar'
-
-
+arr[1] = 'ab'
 </script>

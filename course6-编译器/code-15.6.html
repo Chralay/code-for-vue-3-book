@@ -95,6 +95,7 @@
     return tokens
   }
   
+  // 可以看到，这个初版解析器是先拿到tokens，再构造模板AST。
   function parse(str) {
     const tokens = tokenize(str)
 
@@ -276,9 +277,11 @@
   }
 
   const ast = parse(`<div><p>Vue</p><p>Template</p></div>`)
+  console.log('after parse', ast)
+
   transform(ast)
 
-  console.log(ast)
+  console.log('after transform', ast)
 
   console.log(generate(ast.jsNode))
 

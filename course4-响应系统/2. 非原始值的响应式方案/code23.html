@@ -213,9 +213,9 @@ const mutableInstrumentations = {
   },
 
   [Symbol.iterator]: iterationMethod,
-  entries: iterationMethod,
-  keys: keysIterationMethod,
-  values: valuesIterationMethod,
+  entries: iterationMethod
+  // keys: keysIterationMethod,
+  // values: valuesIterationMethod,
 }
 
 function iterationMethod() {
@@ -230,14 +230,15 @@ function iterationMethod() {
 
   // 将其返回
   return {
-    next() {
-      const { value, done } = itr.next()
-      return {
-        value: value ? [wrap(value[0]), wrap(value[1])] : value,
-        done
-      }
-    },
+    // next() {
+    //   const { value, done } = itr.next()
+    //   return {
+    //     value: value ? [wrap(value[0]), wrap(value[1])] : value,
+    //     done
+    //   }
+    // }
     [Symbol.iterator]() {
+      console.log('this?', this);
       return this
     }
   }
@@ -315,13 +316,12 @@ const p = reactive(new Map([
 ]))
 
 effect(() => {
-  for (const value of p.keys()) {
+  for (const value of p.entries()) {
     console.log(value)
   }
 })
 
 p.set('key3', 'value3')
-
 
 // const m = new Map([
 //   ['key1', 'value1'],
