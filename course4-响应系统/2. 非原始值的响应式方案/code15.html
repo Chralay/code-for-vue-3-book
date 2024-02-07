@@ -207,13 +207,13 @@ function cleanup(effectFn) {
 const arr = reactive([1, 2, 3, 4, 5])
 
 effect(() => {
-  for (const val of arr.keys()) {
-    console.log(val)
+  for (const val of arr) {
+    console.log('val:', val)
   }
 })
 
-arr[1] = 'bar'
-arr.length = 0
+// arr[1] = 'bar'
+arr.length = 2
 
 
 </script>

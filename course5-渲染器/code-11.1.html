@@ -129,8 +129,9 @@ function createRenderer(options) {
             patch(oldVNode, newVNode, container)
             patched++
             source[k - newStart] = i
-            // 判断是否需要移动
+            // 判断是否需要移动。遍历的是旧子节点，索引是递增的。
             if (k < pos) {
+              // 在旧子节点里 k+1 > k，并且前提是 pos==k，相当于理论上 k+1 > pos。但如果出现 k < pos证明新节点顺序与旧节点不一样，需要move
               moved = true
             } else {
               pos = k
@@ -163,7 +164,7 @@ function createRenderer(options) {
               : null
             // 挂载
             patch(null, newVNode, container, anchor)
-          } else if (i !== seq[j]) {
+          } else if (i !== seq[s]) {
             // 说明该节点需要移动
             // 该节点在新的一组子节点中的真实位置索引
             const pos = i + newStart

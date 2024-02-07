@@ -149,9 +149,15 @@
     }
   }
 
-  function transformElement(node) {
+  function transformElement(node, context) {
     if (node.type === 'Element' && node.tag === 'p') {
       node.tag = 'h1'
+      // 为什么实现了replaceNode但不用？
+      // 答：因为replaceNode里修改了context.currentNode，这会影响到traverseNode遍历children时的“context.parent = context.currentNode”。
+      // context.replaceNode({
+      //   type: 'Element',
+      //   tag: 'h1'
+      // })
     }
   }
 
@@ -168,7 +174,7 @@
     const transforms = context.nodeTransforms
     for (let i = 0; i < transforms.length; i++) {
       transforms[i](context.currentNode, context)
-      if (!context.currentNode) return
+      if (!context.currentNode) return // 防止调用transforms[i](context.currentNode, context)执行的是removeNode。
     }
 
     const children = context.currentNode.children

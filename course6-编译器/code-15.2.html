@@ -106,7 +106,7 @@
     const elementStack = [root]
 
     while (tokens.length) {
-      const parent = elementStack[elementStack.length - 1]
+      const parent = elementStack[elementStack.length - 1] // 栈顶
       const t = tokens[0]
       switch (t.type) {
         case 'tag':

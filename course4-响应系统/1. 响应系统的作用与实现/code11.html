@@ -113,7 +113,7 @@ function computed(getter) {
     scheduler() {
       if (!dirty) {
         dirty = true
-        trigger(obj, 'value')
+        // trigger(obj, 'value')
       }
     }
   })
@@ -124,7 +124,7 @@ function computed(getter) {
         value = effectFn()
         dirty = false
       }
-      track(obj, 'value')
+      // track(obj, 'value')
       return value
     }
   }
@@ -134,18 +134,40 @@ function computed(getter) {
 
 const sumRes = computed(() => obj.foo + obj.bar)
 
-console.log(sumRes.value)
-console.log(sumRes.value)
+// console.log(sumRes.value)
+// console.log(sumRes.value)
 
-obj.foo++
+// obj.foo++
 
-console.log(sumRes.value)
+// console.log(sumRes.value)
 
 effect(() => {
   console.log(sumRes.value)
 })
 
 obj.foo++
+
+// ========================= watch自测
+
+watch(obj, () => {
+  console.log('数据变了')
+})
+
+// 修改响应数据的值，会导致回调函数执行
+obj.foo++
+
+
+function watch(obj, callback) {
+  const effectFn = effect(() => {
+    // 遍历一遍obj，将obj
+    return obj.foo + obj.bar
+  }, {
+    scheduler(fn) {
+      callback()
+      fn()
+    }
+  })
+}
 
 
 

@@ -72,6 +72,15 @@ function createRenderer(options) {
             break // 这里需要 break
           }
         }
+        // 没有找到旧节点，属于新增节点
+        if(j === oldChildren.length) {
+          // 创建节点
+          const prevVNode = newChildren[i - 1]
+              if (prevVNode) {
+                const anchor = prevVNode.el.nextSibling
+                insert(newVNode.el, container, anchor)
+              }
+        }
       }
       
     } else {

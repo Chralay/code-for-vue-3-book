@@ -35,8 +35,8 @@ el.classList.add('enter-from')
 el.classList.add('enter-active')
 
 container.appendChild(el)
-// enter
-nextFrame(() => {
+// enter 2022年Chromium已修复bug，不需要nextFrame，直接使用requestAnimationFrame即可
+requestAnimationFrame(() => {
   el.classList.remove('enter-from')
   el.classList.add('enter-to')
 
@@ -60,7 +60,7 @@ el.addEventListener('click', () => {
 
   // document.body.offsetHeight
 
-  nextFrame(() => {
+  requestAnimationFrame(() => {
     el.classList.remove('leave-from')
     el.classList.add('leave-to')
 
