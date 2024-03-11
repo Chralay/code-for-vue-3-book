@@ -1,0 +1,34 @@
+<div id="app">
+    {{ message }}
+    <button @click="clickBtn">get Apple</button>
+    {{ obj.apple }}
+</div>
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+<script>
+var vm = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!',
+    clickFlag: 0,
+    obj: {},
+    obj1: {apple: 9}
+  },
+  mounted() {
+    
+    // this.apple = '123'
+    this.obj.apple = 123;
+    // console.log(this.obj.apple);
+    this.$set(this.obj,'apple',123)
+    // console.log(this);
+    this.$forceUpdate();
+  },
+  methods:{
+    clickBtn(){
+        this.obj.apple=888
+        // this.$set(this.obj,'apple',888)
+        this.$forceUpdate();
+        console.log(this.message, this.obj, this.obj1) // 从打印信息来看，obj的apple缺少setter、getter。
+    }
+  }
+})
+</script>
