@@ -97,7 +97,7 @@ function parseElement(context, ancestors) {
     context.mode = TextModes.DATA
   }
   element.children = parseChildren(context, ancestors)
-  ancestors.pop()
+  ancestors.pop() // 得维护好ancestors，push后需要在特定时机pop。因为整个递归链中共用这个数组
   
   if (context.source.startsWith(`</${element.tag}`)) {
     parseTag(context, 'end')

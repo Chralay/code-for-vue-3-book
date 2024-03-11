@@ -1,0 +1,19 @@
+<div id="app">{{text}}\{{apple}}</div>
+
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    text: 123
+  },
+  mounted() {
+    // this.apple = 'qqq' 
+  },
+  methods: {
+
+  }
+})
+
+</script>

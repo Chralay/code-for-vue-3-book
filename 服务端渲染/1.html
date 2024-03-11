@@ -20,6 +20,9 @@
   
   <script src="https://unpkg.com/@vue/reactivity@3.0.5/dist/reactivity.global.js"></script>
   <script>
+
+    // 虚拟 DOM 渲染为 HTML 字符串，用于服务器端渲染。
+
   
   const { reactive, ref, effect, shallowReactive, shallowReadonly, shallowRef } = VueReactivity
   
@@ -585,7 +588,7 @@
       vnode.el = node
 
       if (typeof type === 'object') {
-        mountComponent(vnode, container, null)
+        mountComponent(vnode, container, null) // 为什么直接用container，而且hydrateNode函数形参没有container？因为hydrate的挂载实际上不需要用到这个参数，但mountComponent需要。
       } else if (typeof type === 'string') {
         hydrateElement(node, vnode)
       }
